@@ -1,0 +1,4 @@
+INDEX VERSION 1.130+/Volumes/Naif/n/2018/Desktop - Naif'sMacBook/lastsemester/multimedia/hw-4/eclipse-workshop-hw4/.metadata/.plugins/org.eclipse.jdt.core
+721502379.index
+2988127656.index
+825618783.index

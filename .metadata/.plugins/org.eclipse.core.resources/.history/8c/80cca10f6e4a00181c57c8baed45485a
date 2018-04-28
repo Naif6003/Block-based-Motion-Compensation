@@ -1,0 +1,137 @@
+import java.util.ArrayList;
+import java.util.Scanner;
+
+public class Motion {
+
+	static int p=5;
+	static int n= 32;
+	
+	static void start(String imgName) {
+		
+		Image currentImage = new Image(imgName);
+		int width,height;
+		int[] a = new int[3];
+		ArrayList<MiniImage> listOfImages = new ArrayList<MiniImage>();
+		// use the G values 
+		
+		for(width=0; width<currentImage.getW(); width+=n) {
+			for(height=0; height<currentImage.getH(); height+=n) {
+				
+				Image miniBlock = new Image(n,n);
+				if(width+n < currentImage.getW() && height+n < currentImage.getH()) {
+				int[] rgb = new int[3];
+				int ii=0,jj=0;
+				for(int i=width; i<width+n; i++) {
+					for(int j=height; j<height+n; j++) {
+						currentImage.getPixel(i, j, rgb);
+						miniBlock.setPixel(ii, jj++, rgb);
+					}
+					ii++;
+					jj=0;
+				}
+			}
+				Motion motion = new Motion();
+				MiniImage newImage = motion.new MiniImage(miniBlock,width,height);
+				listOfImages.add(newImage);
+			}
+		}
+		
+		
+		listOfImages.get(10).img.display();
+		compareImages(listOfImages, imgName);
+	}
+	
+	
+	static void compareImages(ArrayList<MiniImage> imageMiniBlockList, String imgName) {
+		
+		Scanner sc = new Scanner(System.in);
+		Image nextImage = new Image(imgName);              							// the forward image used to find the frame.
+		Motion motion = new Motion();
+		MiniImage blockToSearch = motion.new MiniImage(null, 0, 0);                          // block to match in the nextImage.
+		
+		System.out.print("Choose the position(width) of the block you want to seach for(multiple of 16): ");
+		int position = sc.nextInt();
+		
+		// find the position in the width to get the 16x16 block that we want to compare in the nextImage.
+		for(int i=0; i<imageMiniBlockList.size(); i++) {                 // search the list of blocks from the previous image
+			if(imageMiniBlockList.get(i).getWidth() == position && imageMiniBlockList.get(i).getHeight() == position) {
+				blockToSearch.setImg(imageMiniBlockList.get(i).img);            // create an image of the block 
+				blockToSearch.setHeight(imageMiniBlockList.get(i).height);
+				blockToSearch.setWidth(imageMiniBlockList.get(i).width);
+				imageMiniBlockList.get(i).img.display();                  // show the 16x16 block 
+			}
+		}
+		
+		// we compare the blocks around the width and hieght of the original block from the old image. 
+//		System.out.println(blockToSearch.getWidth());
+//		System.out.println(blockToSearch.getHeight());
+		
+		
+		int[] rgbBlock = new int[3];
+		int[] rgbNextBlock = new int[3];
+		int sum =0;
+		int p=5;
+		int numberOfRounds = (int) Math.pow((p*2+1),2);
+		
+		System.out.println(numberOfRounds);
+		
+		
+//			for(int i=blockToSearch.getWidth(); i<blockToSearch.getWidth()+16; i++) {
+//				for(int j=blockToSearch.getHeight(); i<blockToSearch.getHeight()+16; j++) {
+//					blockToSearch.getImg().getPixel(i, j, rgbBlock);
+//					nextImage.getPixel(i, j, rgbNextBlock);
+//					sum += rgbBlock[0] - rgbNextBlock[0];
+//				}
+//			}
+		
+		sum /= blockToSearch.getWidth()*blockToSearch.getHeight();
+		
+		
+	}
+	
+	public class MiniImage {
+		public Image img;
+		public int width;
+		public int height;
+		
+		public MiniImage(Image img, int w, int h) {
+			this.img = img;
+			this.width = w;
+			this.height = h;
+		}
+
+		public Image getImg() {
+			return img;
+		}
+
+		public void setImg(Image img) {
+			this.img = img;
+		}
+
+		public int getWidth() {
+			return width;
+		}
+
+		public void setWidth(int width) {
+			this.width = width;
+		}
+
+		public int getHeight() {
+			return height;
+		}
+
+		public void setHeight(int height) {
+			this.height = height;
+		}
+		
+	}
+	
+	
+	
+	public static void main(String[] args) {
+		
+		start(args[0]);
+		
+		
+	}
+}
